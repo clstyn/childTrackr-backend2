@@ -71,11 +71,13 @@ async function getUserLogin(req, res) {
 // Controller untuk menambah profil pengguna baru
 async function addUserProfile(req, res) {
   try {
-    const { username, name } = req.body;
+    const { username, name, latitude, longitude } = req.body;
 
     const newProfile = await UserProfile.create({
       username,
       name,
+      latitude,
+      longitude,
     });
 
     res.status(200).json(newProfile);

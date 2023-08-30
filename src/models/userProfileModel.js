@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const userProfileSchema = mongoose.Schema({
   username: String,
   name: String,
+  latitude: Number,
+  longitude: Number,
 });
 
 // Buat model untuk profil pengguna
