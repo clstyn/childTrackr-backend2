@@ -7,14 +7,19 @@ async function registerChild(req, res) {
   try {
     const { username, password } = req.body;
 
-    const existingUser = await childRegistration.findOne({ username });
+    // Normalisasi username ke huruf kecil
+    const normalizedUsername = username.toLowerCase();
+
+    const existingUser = await childRegistration.findOne({
+      username: normalizedUsername,
+    });
 
     if (existingUser) {
       return res.status(400).json({ message: "Username already exists" });
     }
 
     const childregistration = await childRegistration.create({
-      username,
+      username: normalizedUsername, // Simpan nama pengguna yang sudah dinormalisasi
       password,
     });
 
