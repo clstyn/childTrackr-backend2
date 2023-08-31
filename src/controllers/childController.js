@@ -1,5 +1,5 @@
 const childRegistration = require("../models/childModel");
-const ChildProfile = require("../models/childprofileModel");
+const ChildProfile = require("../models/childProfileModel");
 const childCoord = require("../models/childCoModel");
 
 // Controller untuk mendaftarkan anak baru
