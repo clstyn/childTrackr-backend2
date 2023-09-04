@@ -6,15 +6,35 @@ async function registerUser(req, res) {
   try {
     const { username, password } = req.body;
 
-    // Periksa apakah username sudah ada dalam database
-    const existingUser = await Registration.findOne({ username });
+    // Normalisasi username ke huruf kecil
+    const normalizedUsername = username.toLowerCase();
+
+    const existingUser = await Registration.findOne({
+      username: normalizedUsername,
+    });
+
+    // // Periksa apakah username sudah ada dalam database
+    // const existingUser = await Registration.findOne({ username });
 
     if (existingUser) {
       return res.status(400).json({ message: "Username already exists" });
     }
 
+    // Check password requirements
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      // Password does not meet the requirements
+      return res.status(401).json({
+        message:
+          "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
+      });
+    }
+
     // Buat pengguna baru dan simpan ke database
-    const registration = await Registration.create({ username, password });
+    const registration = await Registration.create({
+      username: normalizedUsername,
+      password,
+    });
 
     res.status(200).json(registration);
   } catch (error) {

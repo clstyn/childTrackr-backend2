@@ -18,6 +18,16 @@ async function registerChild(req, res) {
       return res.status(400).json({ message: "Username already exists" });
     }
 
+    // Check password requirements
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      // Password does not meet the requirements
+      return res.status(401).json({
+        message:
+          "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
+      });
+    }
+
     const childregistration = await childRegistration.create({
       username: normalizedUsername, // Simpan nama pengguna yang sudah dinormalisasi
       password,
