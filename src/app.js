@@ -7,7 +7,7 @@ const userRoutes = require("./routes/userRoutes");
 const childRoutes = require("./routes/childRoutes");
 
 // const admin = require("firebase-admin");
-// const serviceAccount = require("./firebaseConfig.js"); // Sesuaikan dengan lokasi file konfigurasi Anda
+// const serviceAccount = require("./firebase.messaging.sw"); // Sesuaikan dengan lokasi file konfigurasi Anda
 
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
