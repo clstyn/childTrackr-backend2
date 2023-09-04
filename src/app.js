@@ -34,7 +34,7 @@ app.use("/user", userRoutes);
 app.use("/child", childRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Welcome to ChildTrackr API!");
 });
 
 // Jalankan server pada port tertentu
