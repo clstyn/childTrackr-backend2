@@ -27,3 +27,9 @@ const childRegistrationSchema = mongoose.Schema(
     versionKey: false,
   }
 );
+
+const childRegistration = mongoose.model(
+  "childRegistration",
+  childRegistrationSchema
+);
+module.exports = childRegistration;
