@@ -6,16 +6,16 @@ async function saveGeofenceData(req, res) {
     const { username, latitude, longitude, radius, start_time, end_time } =
       req.body;
 
-    if (
-      !username ||
-      !latitude ||
-      !longitude ||
-      !radius ||
-      !start_time ||
-      !end_time
-    ) {
-      return res.status(400).json({ error: "Semua kolom harus diisi" });
-    }
+    // if (
+    //   !username ||
+    //   !latitude ||
+    //   !longitude ||
+    //   !radius ||
+    //   !start_time ||
+    //   !end_time
+    // ) {
+    //   return res.status(400).json({ error: "Semua kolom harus diisi" });
+    // }
 
     const newGeofence = new Geofence({
       username,
