@@ -33,6 +33,9 @@ app.use((req, res, next) => {
 app.use("/user", userRoutes);
 app.use("/child", childRoutes);
 
+// Menggunakan rute Geofence
+app.use("/geofence", geofenceRoutes);
+
 app.get("/", (req, res) => {
   res.send("Welcome to ChildTrackr API!");
 });
