@@ -5,6 +5,7 @@ require("dotenv").config();
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const childRoutes = require("./routes/childRoutes");
+const geofenceRoutes = require("./routes/geofenceRoutes");
 
 // const admin = require("firebase-admin");
 // const serviceAccount = require("./firebase.messaging.sw"); // Sesuaikan dengan lokasi file konfigurasi Anda
