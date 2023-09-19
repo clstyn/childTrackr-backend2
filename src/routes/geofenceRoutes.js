@@ -9,4 +9,6 @@ router.post("/data", geofenceController.saveGeofenceData);
 // Rute untuk mengambil semua data Geofence dari database
 router.get("/data", geofenceController.getGeofenceData);
 
+router.put("/data/:username", geofenceController.updateGeofenceLocation);
+
 module.exports = router;
