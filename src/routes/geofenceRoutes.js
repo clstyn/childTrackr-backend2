@@ -11,4 +11,7 @@ router.get("/data", geofenceController.getGeofenceData);
 
 router.put("/data/:username", geofenceController.updateGeofenceLocation);
 
+// Rute untuk mengambil data Geofence berdasarkan username (GET)
+router.get("/data/:username", geofenceController.getGeofenceByUsername);
+
 module.exports = router;
