@@ -53,9 +53,6 @@ async function updateGeofenceLocation(req, res) {
   try {
     const geofence = await Geofence.findOne({ username });
 
-    // if (!geofence) {
-    //   return res.status(404).json({ error: "Data Geofence tidak ditemukan." });
-    // }
     if (geofence) {
       geofence.latitude = latitude;
       geofence.longitude = longitude;
