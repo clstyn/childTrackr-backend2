@@ -48,19 +48,20 @@ async function getGeofenceData(req, res) {
 // Controller untuk pembaruan data lokasi Geofence berdasarkan username
 async function updateGeofenceLocation(req, res) {
   const { username } = req.params;
-  const { latitude, longitude, start_time, end_time } = req.body;
+  const { latitude, longitude, start_time, end_time, radius } = req.body;
 
   try {
     const geofence = await Geofence.findOne({ username });
 
-    if (!geofence) {
-      return res.status(404).json({ error: "Data Geofence tidak ditemukan." });
-    }
+    // if (!geofence) {
+    //   return res.status(404).json({ error: "Data Geofence tidak ditemukan." });
+    // }
     if (geofence) {
       geofence.latitude = latitude;
       geofence.longitude = longitude;
       geofence.start_time = start_time;
       geofence.end_time = end_time;
+      geofence.radius = radius;
 
       await geofence.save();
       return res
