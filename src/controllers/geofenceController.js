@@ -56,16 +56,32 @@ async function updateGeofenceLocation(req, res) {
     if (!geofence) {
       return res.status(404).json({ error: "Data Geofence tidak ditemukan." });
     }
+    if (geofence) {
+      geofence.latitude = latitude;
+      geofence.longitude = longitude;
+      geofence.start_time = start_time;
+      geofence.end_time = end_time;
+
+      await geofence.save();
+      return res
+        .status(200)
+        .json({ message: "Data lokasi berhasil diperbarui" });
+    } else {
+      const newGeofence = new Geofence({
+        username,
+        latitude,
+        longitude,
+        radius,
+        start_time,
+        end_time,
+      });
+      await newGeofence.save();
+      return res
+        .status(200)
+        .json({ message: "Data lokasi berhasil diperbarui" });
+    }
 
     // Perbarui data lokasi
-    geofence.latitude = latitude;
-    geofence.longitude = longitude;
-    geofence.start_time = start_time;
-    geofence.end_time = end_time;
-
-    await geofence.save();
-
-    res.status(200).json({ message: "Data lokasi berhasil diperbarui" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Terjadi kesalahan pada server." });
