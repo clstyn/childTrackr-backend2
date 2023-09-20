@@ -48,7 +48,7 @@ async function getGeofenceData(req, res) {
 // Controller untuk pembaruan data lokasi Geofence berdasarkan username
 async function updateGeofenceLocation(req, res) {
   const { username } = req.params;
-  const { latitude, longitude } = req.body;
+  const { latitude, longitude, start_time, end_time } = req.body;
 
   try {
     const geofence = await Geofence.findOne({ username });
@@ -60,6 +60,8 @@ async function updateGeofenceLocation(req, res) {
     // Perbarui data lokasi
     geofence.latitude = latitude;
     geofence.longitude = longitude;
+    geofence.start_time = start_time;
+    geofence.end_time = end_time;
 
     await geofence.save();
 
