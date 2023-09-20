@@ -6,6 +6,7 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const childRoutes = require("./routes/childRoutes");
 const geofenceRoutes = require("./routes/geofenceRoutes");
+const history = require("./routes/geofenceHistoryRoutes");
 
 // const admin = require("firebase-admin");
 // const serviceAccount = require("./firebase.messaging.sw"); // Sesuaikan dengan lokasi file konfigurasi Anda
@@ -36,6 +37,8 @@ app.use("/child", childRoutes);
 
 // Menggunakan rute Geofence
 app.use("/geofence", geofenceRoutes);
+
+app.use("/history", history);
 
 app.get("/", (req, res) => {
   res.send("Welcome to ChildTrackr API!");
