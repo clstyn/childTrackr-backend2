@@ -1,4 +1,4 @@
-const GeofenceHistory = require("../models/geofenceHistory");
+const GeofenceHistory = require("../models/geofenceHistoryModel");
 
 // Controller untuk menyimpan data Geofence ke dalam database
 async function saveGeofenceHistoryData(req, res) {

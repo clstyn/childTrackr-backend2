@@ -1,4 +1,4 @@
-const Geofence = require("../models/geofence");
+const Geofence = require("../models/geofenceModel");
 
 // Controller untuk menyimpan data Geofence ke dalam database
 async function saveGeofenceData(req, res) {
