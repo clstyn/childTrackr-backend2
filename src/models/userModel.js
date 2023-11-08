@@ -21,6 +21,10 @@ const registrationSchema = mongoose.Schema(
           "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
       },
     },
+    isVerified: {
+      type: Boolean,
+      default: false, // Pengguna belum diverifikasi secara default
+    },
   },
   {
     timestamps: false,
