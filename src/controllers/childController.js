@@ -2,12 +2,10 @@ const childRegistration = require("../models/childModel");
 const ChildProfile = require("../models/childProfileModel");
 const childCoord = require("../models/childCoModel");
 
-// Controller untuk mendaftarkan anak baru
 async function registerChild(req, res) {
   try {
     const { username, password } = req.body;
 
-    // Normalisasi username ke huruf kecil
     const normalizedUsername = username.toLowerCase();
 
     const existingUser = await childRegistration.findOne({
@@ -18,10 +16,8 @@ async function registerChild(req, res) {
       return res.status(400).json({ message: "Username already exists" });
     }
 
-    // Check password requirements
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordRegex.test(password)) {
-      // Password does not meet the requirements
       return res.status(401).json({
         message:
           "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
@@ -29,7 +25,7 @@ async function registerChild(req, res) {
     }
 
     const childregistration = await childRegistration.create({
-      username: normalizedUsername, // Simpan nama pengguna yang sudah dinormalisasi
+      username: normalizedUsername,
       password,
     });
 
@@ -40,7 +36,6 @@ async function registerChild(req, res) {
   }
 }
 
-// Controller untuk login anak
 async function loginChild(req, res) {
   try {
     const { username, password } = req.body;
@@ -62,7 +57,6 @@ async function loginChild(req, res) {
   }
 }
 
-// Controller untuk mendapatkan semua data profil anak
 async function getChildlogin(req, res) {
   try {
     const childregistration = await childRegistration.find({});
@@ -73,7 +67,6 @@ async function getChildlogin(req, res) {
   }
 }
 
-// Controller untuk mendapatkan data login anak
 async function getChildProfiles(req, res) {
   try {
     const childProfiles = await ChildProfile.find();
@@ -85,7 +78,6 @@ async function getChildProfiles(req, res) {
   }
 }
 
-// Controller untuk menambah profil anak baru
 async function addChildProfile(req, res) {
   try {
     const { username, name, latitude, longitude } = req.body;
@@ -103,7 +95,6 @@ async function addChildProfile(req, res) {
   }
 }
 
-// Controller untuk menghapus profil anak berdasarkan ID
 async function deleteChildProfile(req, res) {
   try {
     const { id } = req.params;
@@ -117,7 +108,6 @@ async function deleteChildProfile(req, res) {
   }
 }
 
-// Controller untuk mengirimkan data koordinat anak
 async function ChildCoords(req, res) {
   try {
     const { username, latitude, longitude } = req.body;
@@ -135,7 +125,6 @@ async function ChildCoords(req, res) {
   }
 }
 
-// Controller untuk update data koordinat anak
 async function updateChildCoords(req, res) {
   const { username } = req.body;
 
@@ -155,13 +144,10 @@ async function updateChildCoords(req, res) {
   }
 }
 
-// Controller untuk mendapatkan semua data koordinat anak
 async function getChildCoords(req, res) {
   try {
-    // Mengambil semua data dari koleksi ChildCoord
     const childCoords = await childCoord.find({});
 
-    // Mengirim data sebagai respons
     res.status(200).json(childCoords);
   } catch (error) {
     console.error("Error retrieving coordinates:", error);
@@ -169,7 +155,6 @@ async function getChildCoords(req, res) {
   }
 }
 
-// Controller untuk update data koordinat anak berdasarkan username
 async function liveChildCoords(req, res) {
   const { username } = req.params;
   const { latitude, longitude } = req.body;

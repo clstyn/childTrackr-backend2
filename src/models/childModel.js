@@ -10,10 +10,8 @@ const childRegistrationSchema = mongoose.Schema(
       type: String,
       required: true,
       minlength: 8,
-      // Use a regular expression to add password validation rules
       validate: {
         validator: function (password) {
-          // At least 1 uppercase letter, 1 lowercase letter, and 1 digit
           const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
           return regex.test(password);
         },

@@ -1,6 +1,5 @@
 const Geofence = require("../models/geofenceModel");
 
-// Controller untuk menyimpan data Geofence ke dalam database
 async function saveGeofenceData(req, res) {
   try {
     const { username, latitude, longitude, radius, start_time, end_time } =
@@ -34,7 +33,6 @@ async function saveGeofenceData(req, res) {
   }
 }
 
-// Controller untuk mengambil semua data Geofence dari database
 async function getGeofenceData(req, res) {
   try {
     const geofences = await Geofence.find({});
@@ -45,7 +43,6 @@ async function getGeofenceData(req, res) {
   }
 }
 
-// Controller untuk pembaruan data lokasi Geofence berdasarkan username
 async function updateGeofenceLocation(req, res) {
   const { username } = req.params;
   const { latitude, longitude, start_time, end_time, radius } = req.body;
@@ -78,15 +75,12 @@ async function updateGeofenceLocation(req, res) {
         .status(200)
         .json({ message: "Data lokasi berhasil diperbarui" });
     }
-
-    // Perbarui data lokasi
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 }
 
-// Controller untuk mengambil data Geofence berdasarkan username
 async function getGeofenceByUsername(req, res) {
   const { username } = req.params;
 

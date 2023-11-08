@@ -1,4 +1,3 @@
-// models/geofence.js
 const mongoose = require("mongoose");
 
 const geofenceSchema = new mongoose.Schema({

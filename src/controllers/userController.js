@@ -1,24 +1,20 @@
-const validator = require("validator"); // Import modul validator
+const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET;
 const bcrypt = require("bcrypt");
-
 const Registration = require("../models/userModel");
 const UserProfile = require("../models/userProfileModel");
 
-// Controller untuk mendaftarkan pengguna baru
 async function registerUser(req, res) {
   try {
     const { username, password, email } = req.body;
 
-    // Normalisasi username ke huruf kecil
     const normalizedEmail = email.toLowerCase();
 
     const existingEmail = await Registration.findOne({
       email: normalizedEmail,
     });
 
-    // Validasi email
     if (!validator.isEmail(email)) {
       return res.status(400).json({ message: "Invalid email address" });
     }
@@ -29,28 +25,24 @@ async function registerUser(req, res) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Check password requirements
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordRegex.test(password)) {
-      // Password does not meet the requirements
       return res.status(401).json({
         message:
           "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
       });
     }
 
-    // Buat pengguna baru dan simpan ke database
     const registration = await Registration.create({
       username: username,
       password: hashedPassword,
       email: normalizedEmail,
     });
 
-    // Kirim email verifikasi
-    const transporter = req.app.get("transporter"); // Ambil transporter dari app
+    const transporter = req.app.get("transporter");
 
     const mailOptions = {
-      from: "Verifikasi email Andal-APP <test@mfarizalpasha@gmail.com>", // Alamat email Anda
+      from: "Verifikasi email Andal-APP <test@mfarizalpasha@gmail.com>",
       to: normalizedEmail,
       subject: "Verifikasi Email",
       text:
@@ -73,12 +65,10 @@ async function registerUser(req, res) {
   }
 }
 
-// Controller untuk login pengguna
 async function loginUser(req, res) {
   try {
     const { email, password } = req.body;
 
-    // Mencari pengguna berdasarkan username di database
     const user = await Registration.findOne({ email });
 
     if (!user) {
@@ -88,14 +78,13 @@ async function loginUser(req, res) {
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {
-        // Periksa apakah pengguna telah diverifikasi
         if (user.isVerified) {
-          // Jika login berhasil, buat token JWT
           const token = jwt.sign({ userId: user._id }, secretKey, {
             expiresIn: "1d",
           });
-          // req.session.userId = user._id;
-          res.status(200).json({ isAuthenticated: true, token });
+          res
+            .status(200)
+            .json({ isAuthenticated: true, token, username: user.username });
         } else {
           res
             .status(401)
@@ -113,7 +102,6 @@ async function loginUser(req, res) {
   }
 }
 
-// Controller untuk mendapatkan semua data profil pengguna
 async function getUserProfiles(req, res) {
   try {
     const userProfiles = await UserProfile.find();
@@ -135,7 +123,6 @@ async function getUserLogin(req, res) {
   }
 }
 
-// Controller untuk menambah profil pengguna baru
 async function addUserProfile(req, res) {
   try {
     const { username, name, latitude, longitude } = req.body;
@@ -153,12 +140,10 @@ async function addUserProfile(req, res) {
   }
 }
 
-// Controller untuk menghapus profil pengguna berdasarkan ID
 async function deleteUserProfile(req, res) {
   try {
     const { id } = req.params;
 
-    // Hapus profil pengguna berdasarkan ID
     await UserProfile.findByIdAndDelete(id);
 
     res.status(200).json({ message: "User profile deleted successfully" });
@@ -179,7 +164,6 @@ async function verificationEmail(req, res) {
 
     console.log(registration);
 
-    // Tandai pengguna sebagai diverifikasi
     registration.isVerified = true;
     await registration.save();
 
@@ -190,10 +174,9 @@ async function verificationEmail(req, res) {
   }
 }
 
-// Controller untuk mendapatkan informasi pengguna yang sedang login
 async function getLoggedInUser(req, res) {
   try {
-    const token = req.headers.authorization; // Mengambil token dari header
+    const token = req.headers.authorization;
 
     if (!token) {
       return res
@@ -208,14 +191,12 @@ async function getLoggedInUser(req, res) {
           .json({ isAuthenticated: false, message: "Invalid token" });
       }
 
-      // Token valid, ambil data pengguna yang sedang login
       const user = await Registration.findById(decoded.userId);
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Kirim informasi pengguna yang sedang login
       res.status(200).json({ isAuthenticated: true, user: user });
     });
   } catch (error) {

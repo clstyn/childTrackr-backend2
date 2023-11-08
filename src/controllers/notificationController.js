@@ -1,6 +1,5 @@
 const Notification = require("../models/notificationModel");
 
-// Controller untuk menyimpan data Notifikasi ke dalam database
 async function saveNotificationData(req, res) {
   try {
     const { username, status } = req.body;
@@ -22,7 +21,6 @@ async function saveNotificationData(req, res) {
   }
 }
 
-// Controller untuk mengambil semua data Geofence dari database dalam format history
 async function getNotificationData(req, res) {
   try {
     const notification = await Notification.find({}).sort({

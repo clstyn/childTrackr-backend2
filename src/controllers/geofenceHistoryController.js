@@ -1,6 +1,5 @@
 const GeofenceHistory = require("../models/geofenceHistoryModel");
 
-// Controller untuk menyimpan data Geofence ke dalam database
 async function saveGeofenceHistoryData(req, res) {
   try {
     const { username, latitude, longitude, radius, start_time, end_time } =
@@ -34,7 +33,6 @@ async function saveGeofenceHistoryData(req, res) {
   }
 }
 
-// Controller untuk mengambil semua data Geofence dari database dalam format history
 async function getGeofenceHistory(req, res) {
   try {
     const geofenceshistory = await GeofenceHistory.find({}).sort({
