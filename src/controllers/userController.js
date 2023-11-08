@@ -9,22 +9,22 @@ const UserProfile = require("../models/userProfileModel");
 // Controller untuk mendaftarkan pengguna baru
 async function registerUser(req, res) {
   try {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     // Normalisasi username ke huruf kecil
-    const normalizedUsername = username.toLowerCase();
+    const normalizedEmail = email.toLowerCase();
 
-    const existingUser = await Registration.findOne({
-      username: normalizedUsername,
+    const existingEmail = await Registration.findOne({
+      email: normalizedEmail,
     });
 
     // Validasi email
-    if (!validator.isEmail(username)) {
+    if (!validator.isEmail(email)) {
       return res.status(400).json({ message: "Invalid email address" });
     }
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,8 +41,9 @@ async function registerUser(req, res) {
 
     // Buat pengguna baru dan simpan ke database
     const registration = await Registration.create({
-      username: normalizedUsername,
+      username: username,
       password: hashedPassword,
+      email: normalizedEmail,
     });
 
     // Kirim email verifikasi
@@ -50,10 +51,10 @@ async function registerUser(req, res) {
 
     const mailOptions = {
       from: "Verifikasi email Andal-APP <test@mfarizalpasha@gmail.com>", // Alamat email Anda
-      to: normalizedUsername,
+      to: normalizedEmail,
       subject: "Verifikasi Email",
       text:
-        "Terima kasih telah mendaftar. Klik tautan berikut untuk verifikasi email Anda: https://childtrackr-backend-production.up.railway.app//user/verify/" +
+        "Terima kasih telah mendaftar. Klik tautan berikut untuk verifikasi email Anda: https://childtrackr-backend-production.up.railway.app/user/verify/" +
         registration._id,
     };
 
@@ -75,10 +76,10 @@ async function registerUser(req, res) {
 // Controller untuk login pengguna
 async function loginUser(req, res) {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     // Mencari pengguna berdasarkan username di database
-    const user = await Registration.findOne({ username });
+    const user = await Registration.findOne({ email });
 
     if (!user) {
       return res

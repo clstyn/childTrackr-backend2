@@ -25,6 +25,11 @@ const registrationSchema = mongoose.Schema(
       type: Boolean,
       default: false, // Pengguna belum diverifikasi secara default
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
   {
     timestamps: false,
