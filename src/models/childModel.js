@@ -16,7 +16,7 @@ const childRegistrationSchema = mongoose.Schema(
           return regex.test(password);
         },
         message:
-          "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
+          "Password harus terdiri dari minimal 8 karakter, 1 huruf besar, 1 huruf kecil, dan 1 angka",
       },
     },
   },
