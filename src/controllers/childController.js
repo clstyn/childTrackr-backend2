@@ -6,21 +6,21 @@ async function registerChild(req, res) {
   try {
     const { username, password } = req.body;
 
-    const normalizedUsername = username.toLowerCase();
+    const normalizedUsername = username;
 
     const existingUser = await childRegistration.findOne({
       username: normalizedUsername,
     });
 
     if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
+      return res.status(400).json({ message: "Username sudah terdaftar" });
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(401).json({
         message:
-          "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
+          "Password harus terdiri dari minimal 8 karakter, 1 huruf besar, 1 huruf kecil, dan 1 angka",
       });
     }
 
@@ -29,7 +29,9 @@ async function registerChild(req, res) {
       password,
     });
 
-    res.status(200).json(childregistration);
+    res
+      .status(200)
+      .json({ message: "Pendaftaran berhasil", childregistration });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
@@ -43,12 +45,18 @@ async function loginChild(req, res) {
     const user = await childRegistration.findOne({ username });
 
     if (!user) {
-      res.status(401).json({ isAuthenticated: false });
+      res
+        .status(401)
+        .json({ isAuthenticated: false, message: "Username tidak ditemukan" });
     } else {
       if (user.password === password) {
-        res.status(200).json({ isAuthenticated: true });
+        res
+          .status(200)
+          .json({ message: "Login Berhasil", isAuthenticated: true, user });
       } else {
-        res.status(401).json({ isAuthenticated: false });
+        res
+          .status(401)
+          .json({ isAuthenticated: false, message: "Password salah" });
       }
     }
   } catch (error) {
@@ -101,7 +109,7 @@ async function deleteChildProfile(req, res) {
 
     await ChildProfile.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "Child profile deleted successfully" });
+    res.status(200).json({ message: "Child profile berhasil dihapus" });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
@@ -111,7 +119,10 @@ async function deleteChildProfile(req, res) {
 async function ChildCoords(req, res) {
   try {
     const { username, latitude, longitude } = req.body;
-    console.log("Received data:", username, latitude, longitude);
+
+    if (!username || !latitude || !longitude) {
+      return res.status(400).json({ message: "Data tidak lengkap" });
+    }
     const newChildCoord = await childCoord.create({
       username,
       latitude,
@@ -120,8 +131,8 @@ async function ChildCoords(req, res) {
 
     res.status(200).json(newChildCoord);
   } catch (error) {
-    console.error("Error saving coordinate:", error);
-    res.status(500).json({ error: "An error occurred" });
+    console.error("Terjadi kesalahan saat ingin menyimpan koordinat:", error);
+    res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 }
 
@@ -129,7 +140,9 @@ async function updateChildCoords(req, res) {
   const { username } = req.body;
 
   try {
-    const child = await childCoord.findOne({ username });
+    const child = await childCoord
+      .findOne({ username })
+      .sort({ timestamp: -1 });
     if (child) {
       res.json({
         username: child.username,
@@ -150,8 +163,8 @@ async function getChildCoords(req, res) {
 
     res.status(200).json(childCoords);
   } catch (error) {
-    console.error("Error retrieving coordinates:", error);
-    res.status(500).json({ error: "An error occurred" });
+    console.error("Terjadi kesalahan saat mengambil koordinat:", error);
+    res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 }
 
@@ -168,20 +181,21 @@ async function liveChildCoords(req, res) {
       await existingData.save();
       return res
         .status(200)
-        .json({ message: "Coordinate updated successfully" });
+        .json({ message: "Koordinat berhasil diperbaharui!" });
     } else {
-      // Data doesn't exist, create new
       const newCoordinate = new childCoord({
         username,
         latitude,
         longitude,
       });
       await newCoordinate.save();
-      return res.status(200).json({ message: "Coordinate added successfully" });
+      return res
+        .status(200)
+        .json({ message: "Koordinat berhasil ditambahkan!" });
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Failed to update coordinate" });
+    return res.status(500).json({ message: "Gagal memperbaharui koordinat" });
   }
 }
 

@@ -16,11 +16,11 @@ async function registerUser(req, res) {
     });
 
     if (!validator.isEmail(email)) {
-      return res.status(400).json({ message: "Invalid email address" });
+      return res.status(400).json({ message: "Email tidak valid!" });
     }
 
     if (existingEmail) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(400).json({ message: "Email sudah terdaftar" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,7 +29,7 @@ async function registerUser(req, res) {
     if (!passwordRegex.test(password)) {
       return res.status(401).json({
         message:
-          "Password must be at least 8 characters long and contain at least 1 uppercase letter and 1 digit.",
+          "Password harus terdiri dari minimal 8 karakter, 1 huruf besar, 1 huruf kecil, dan 1 angka",
       });
     }
 
@@ -54,7 +54,7 @@ async function registerUser(req, res) {
       if (error) {
         console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        console.log("Email terkirim: " + info.response);
       }
     });
 
@@ -74,7 +74,7 @@ async function loginUser(req, res) {
     if (!user) {
       return res
         .status(401)
-        .json({ isAuthenticated: false, message: "User didn't Exist!" });
+        .json({ isAuthenticated: false, message: "Pengguna tidak ditemukan" });
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {
@@ -88,12 +88,18 @@ async function loginUser(req, res) {
         } else {
           res
             .status(401)
-            .json({ isAuthenticated: false, message: "Email is not verified" });
+            .json({
+              isAuthenticated: false,
+              message: "Email belum terverifikasi",
+            });
         }
       } else {
         res
           .status(401)
-          .json({ isAuthenticated: false, message: "Wrong Password!" });
+          .json({
+            isAuthenticated: false,
+            message: "Password yang anda masukkan salah!",
+          });
       }
     }
   } catch (error) {
@@ -146,7 +152,7 @@ async function deleteUserProfile(req, res) {
 
     await UserProfile.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "User profile deleted successfully" });
+    res.status(200).json({ message: "User profil berhasil dihapus" });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
@@ -159,7 +165,7 @@ async function verificationEmail(req, res) {
     const registration = await Registration.findById(id);
 
     if (!registration) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User tidak ditemukan" });
     }
 
     console.log(registration);
@@ -167,7 +173,7 @@ async function verificationEmail(req, res) {
     registration.isVerified = true;
     await registration.save();
 
-    res.status(200).json({ message: "Email verified successfully" });
+    res.status(200).json({ message: "Email berhasil diverifikasi" });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
@@ -181,20 +187,20 @@ async function getLoggedInUser(req, res) {
     if (!token) {
       return res
         .status(401)
-        .json({ isAuthenticated: false, message: "Token not provided" });
+        .json({ isAuthenticated: false, message: "Token tidak temukan" });
     }
 
     jwt.verify(token, secretKey, async (err, decoded) => {
       if (err) {
         return res
           .status(401)
-          .json({ isAuthenticated: false, message: "Invalid token" });
+          .json({ isAuthenticated: false, message: "Token Salah" });
       }
 
       const user = await Registration.findById(decoded.userId);
 
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User tidak ditemukan" });
       }
 
       res.status(200).json({ isAuthenticated: true, user: user });
