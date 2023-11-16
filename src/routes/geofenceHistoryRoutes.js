@@ -7,4 +7,6 @@ router.post("/data", geofenceHistoryController.saveGeofenceHistoryData);
 
 router.get("/data", geofenceHistoryController.getGeofenceHistory);
 
+router.get("/data/:username", geofenceHistoryController.getHistoryByUsername);
+
 module.exports = router;

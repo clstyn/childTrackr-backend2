@@ -46,7 +46,23 @@ async function getGeofenceHistory(req, res) {
   }
 }
 
+async function getHistoryByUsername(req, res) {
+  const { username } = req.params;
+
+  try {
+    const history = await GeofenceHistory.find({ username }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(history);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+}
+
 module.exports = {
   saveGeofenceHistoryData,
   getGeofenceHistory,
+  getHistoryByUsername,
 };
