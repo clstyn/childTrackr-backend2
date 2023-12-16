@@ -5,6 +5,10 @@ const geofenceHistorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  address_name: {
+    type: String,
+    required: true,
+  },
   latitude: {
     type: Number,
     required: true,

@@ -2,11 +2,19 @@ const Geofence = require("../models/geofenceModel");
 
 async function saveGeofenceData(req, res) {
   try {
-    const { username, latitude, longitude, radius, start_time, end_time } =
-      req.body;
+    const {
+      username,
+      address_name,
+      latitude,
+      longitude,
+      radius,
+      start_time,
+      end_time,
+    } = req.body;
 
     if (
       !username ||
+      !address_name ||
       !latitude ||
       !longitude ||
       !radius ||
@@ -18,6 +26,7 @@ async function saveGeofenceData(req, res) {
 
     const newGeofence = new Geofence({
       username,
+      address_name,
       latitude,
       longitude,
       radius,
