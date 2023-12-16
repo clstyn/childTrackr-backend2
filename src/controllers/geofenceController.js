@@ -54,12 +54,14 @@ async function getGeofenceData(req, res) {
 
 async function updateGeofenceLocation(req, res) {
   const { username } = req.params;
-  const { latitude, longitude, start_time, end_time, radius } = req.body;
+  const { latitude, address_name, longitude, start_time, end_time, radius } =
+    req.body;
 
   try {
     const geofence = await Geofence.findOne({ username });
 
     if (geofence) {
+      geofence.address_name = address_name;
       geofence.latitude = latitude;
       geofence.longitude = longitude;
       geofence.start_time = start_time;
@@ -73,6 +75,7 @@ async function updateGeofenceLocation(req, res) {
     } else {
       const newGeofence = new Geofence({
         username,
+        address_name,
         latitude,
         longitude,
         radius,
