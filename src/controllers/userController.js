@@ -46,7 +46,7 @@ async function registerUser(req, res) {
       to: normalizedEmail,
       subject: "Verifikasi Email",
       text:
-        "Terima kasih telah mendaftar. Klik tautan berikut untuk verifikasi email Anda: https://childtrackr-backend-production.up.railway.app/user/verify/" +
+        "Terima kasih telah mendaftar. Klik tautan berikut untuk verifikasi email Anda: https://child-trackr-backend2.vercel.app/user/verify/" +
         registration._id,
     };
 
